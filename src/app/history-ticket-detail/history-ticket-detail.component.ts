@@ -15,7 +15,8 @@ export class HistoryTicketDetailComponent implements OnDestroy {
     description: 'Description for Concert A',
     price: 50,
     date: '2023-01-01',
-    qrCode: 'https://via.placeholder.com/150' // Placeholder for QR code image URL
+    qrCode: 'https://via.placeholder.com/150', // Placeholder for QR code image URL,
+    image: 'https://via.placeholder.com/600x400' // Placeholder for ticket image URL
   };
 
   isQrModalOpen = false;

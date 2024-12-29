@@ -22,7 +22,8 @@ export class TicketDetailComponent implements OnInit {
       description: 'Description for Concert A',
       price: 50,
       date: '2023-01-01',
-      remaining: 100
+      remaining: 100,
+      image: 'https://via.placeholder.com/600x400'
     };
   }
   openModal() {
