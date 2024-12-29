@@ -31,6 +31,7 @@ export class RegisterComponent {
       // Handle form submission
       console.log(this.registerForm.value);
     } else {
+      this.registerForm.markAllAsTouched();
       // Handle form errors
       console.log('Form is invalid');
     }

@@ -49,6 +49,7 @@ export class LoginComponent {
       console.log(this.loginForm.value);
     } else {
       // Handle form errors
+      this.loginForm.markAllAsTouched();
       console.log('Form is invalid');
     }
   }
