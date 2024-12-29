@@ -6,17 +6,26 @@
       <form class="mt-8 space-y-6" (ngSubmit)="onSubmit()">
         <div class="rounded-md shadow-sm">
           <div class="mb-4">
-            <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+            <label for="username" class="block text-sm font-medium text-gray-700">Email</label>
             <input id="username" name="username" type="text" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
           </div>
-          <div class="mb-6">
+          <div class="mb-6 relative">
             <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-            <input id="password" name="password" type="password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+            <div class="relative flex items-center">
+              <input id="password" [type]="showPassword ? 'text' : 'password'" name="password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+              <button type="button" class="absolute right-3 flex items-center" (click)="togglePasswordVisibility()">
+                <i [ngClass]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'" class="text-gray-500"></i>
+              </button>
+            </div>
           </div>
         </div>
         <div>
           <button type="submit" class="w-full px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Login</button>
         </div>
       </form>
+      <div class="text-center mt-4">
+        <span class="text-gray-700">Don't have an account? </span>
+        <a [routerLink]="['/register']" class="text-indigo-600 hover:underline">Create one</a>
+      </div>
     </div>
   </div>

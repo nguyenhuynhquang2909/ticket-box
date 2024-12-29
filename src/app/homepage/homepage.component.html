@@ -3,11 +3,11 @@
     <swiper-container slides-per-view="3" space-between="30" class="mySwiper">
       <swiper-slide *ngFor="let ticket of tickets">
         <div class="p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-          <div class="p-4 bg-gray-100 rounded-lg">
+          <a [routerLink]="['/ticket', ticket.id]" class="block p-4 bg-gray-100 rounded-lg">
             <h2 class="text-xl font-bold text-indigo-700">{{ ticket.title }}</h2>
             <p class="mt-2 text-gray-700">{{ ticket.description }}</p>
             <p class="mt-4 text-gray-600">Price: {{ ticket.price | currency }}</p>
-          </div>
+          </a>
         </div>
       </swiper-slide>
     </swiper-container>
@@ -15,10 +15,12 @@
     <h2 class="text-2xl font-bold mt-8 mb-4 text-indigo-600">History Tickets</h2>
     <div class="space-y-4">
       <div *ngFor="let ticket of historyTickets" class="p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-        <h3 class="text-xl font-bold text-indigo-700">{{ ticket.title }}</h3>
-        <p class="mt-2 text-gray-700">{{ ticket.description }}</p>
-        <p class="mt-4 text-gray-600">Price: {{ ticket.price | currency }}</p>
-        <p class="mt-2 text-gray-500">Date: {{ ticket.date }}</p>
+        <a [routerLink]="['/ticket', ticket.id]" class="block">
+          <h3 class="text-xl font-bold text-indigo-700">{{ ticket.title }}</h3>
+          <p class="mt-2 text-gray-700">{{ ticket.description }}</p>
+          <p class="mt-4 text-gray-600">Price: {{ ticket.price | currency }}</p>
+          <p class="mt-2 text-gray-500">Date: {{ ticket.date }}</p>
+        </a>
       </div>
     </div>
   </div>
