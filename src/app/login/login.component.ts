@@ -6,6 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +20,8 @@ import { CommonModule } from '@angular/common';
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    CommonModule
+    CommonModule,
+    HttpClientModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -27,7 +30,9 @@ export class LoginComponent {
   loginForm: FormGroup;
   showPassword = false;
   showModal = false;
-  constructor(private router: Router, private fb: FormBuilder) {
+  errorMessage: string | null = null;
+
+  constructor(private router: Router, private fb: FormBuilder, private apiService: ApiService) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]]
@@ -39,11 +44,20 @@ export class LoginComponent {
   }
   onSubmit() {
     if (this.loginForm.valid) {
-      this.showModal = true;
-      setTimeout(() => {
-        this.showModal = false;
-        this.router.navigate(['/homepage']);
-      }, 2000)
+      this.apiService.loginUser(this.loginForm.value).subscribe(
+        response => {
+          this.showModal = true;
+          setTimeout(() => {
+            this.showModal = false;
+            this.router.navigate(['/homepage']);
+          }, 2000)
+        },
+        error => {
+          console.error('Login failed', error);
+          this.errorMessage = error; 
+        }
+      )
+     
      
       // Handle form submission
       console.log(this.loginForm.value);

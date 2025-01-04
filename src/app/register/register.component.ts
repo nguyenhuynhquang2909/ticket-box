@@ -1,20 +1,24 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { ApiService } from '../services/api.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, HttpClientModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
   registerForm: FormGroup;
   showPassword = false;
+  errorMessage: string | null = null;
+  showModal = false;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router) {
     this.registerForm = this.fb.group({
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -28,7 +32,20 @@ export class RegisterComponent {
 
   onSubmit() {
     if (this.registerForm.valid) {
-      // Handle form submission
+      this.apiService.registerUser(this.registerForm.value).subscribe(
+        response => {
+          console.log('Registration successful', response);
+          this.showModal = true;
+          setTimeout(() => {
+            this.showModal = false;
+            this.router.navigate(['/login']);
+          }, 3000);
+        },
+        error => {
+          console.log('Registration failed', error);
+          this.errorMessage = error;
+        }
+      )
       console.log(this.registerForm.value);
     } else {
       this.registerForm.markAllAsTouched();
