@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-header',
@@ -11,12 +12,13 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class HeaderComponent {
   dropdownOpen = false;
-  constructor(private router: Router) {}
+  constructor(private router: Router, private cookieService: CookieService) {}
   toggleDropdown() {
     this.dropdownOpen = !this.dropdownOpen;
   }
 
   logout() {
+    this.cookieService.delete('authToken');
     this.router.navigate(['/login']); 
   }
   

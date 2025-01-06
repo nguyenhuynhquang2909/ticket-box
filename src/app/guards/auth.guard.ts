@@ -1,15 +1,20 @@
-import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, CanActivate, GuardResult, MaybeAsync, Router, RouterStateSnapshot } from "@angular/router";
+import { Injectable } from '@angular/core';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 
-
 @Injectable({
-    providedIn: 'root',
+  providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-    constructor(private router: Router, private cookieService: CookieService) {}
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): MaybeAsync<GuardResult> {
-        throw new Error("Method not implemented.");
+  constructor(private router: Router, private cookieService: CookieService) {}
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    const authToken = this.cookieService.get('authToken');
+    if (authToken) {
+      return true;
+    } else {
+      this.router.navigate(['/login']);
+      return false;
     }
-    
+  }
 }

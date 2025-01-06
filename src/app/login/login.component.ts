@@ -6,8 +6,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { ApiService } from '../services/api.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-login',
@@ -29,10 +30,9 @@ import { ApiService } from '../services/api.service';
 export class LoginComponent {
   loginForm: FormGroup;
   showPassword = false;
-  showModal = false;
-  errorMessage: string | null = null;
+  errorWarning: string | null = null;
 
-  constructor(private router: Router, private fb: FormBuilder, private apiService: ApiService) {
+  constructor(private router: Router, private fb: FormBuilder, private apiService: ApiService, private cookieService: CookieService) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]]
@@ -46,21 +46,13 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.apiService.loginUser(this.loginForm.value).subscribe(
         response => {
-          this.showModal = true;
-          setTimeout(() => {
-            this.showModal = false;
-            this.router.navigate(['/homepage']);
-          }, 2000)
+          const email = this.loginForm.value.email;
+          this.router.navigate(['/otp-verification'], {queryParams: {email}});
         },
-        error => {
-          console.error('Login failed', error);
-          this.errorMessage = error; 
+        (error: string) => {
+          this.errorWarning = 'Username or password incorrect';
         }
       )
-     
-     
-      // Handle form submission
-      console.log(this.loginForm.value);
     } else {
       // Handle form errors
       this.loginForm.markAllAsTouched();

@@ -15,7 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
 export class RegisterComponent {
   registerForm: FormGroup;
   showPassword = false;
-  errorMessage: string | null = null;
+  errorWarning: string | null = null;
   showModal = false;
 
   constructor(private fb: FormBuilder, private apiService: ApiService, private router: Router) {
@@ -42,8 +42,12 @@ export class RegisterComponent {
           }, 3000);
         },
         error => {
-          console.log('Registration failed', error);
-          this.errorMessage = error;
+          console.error('Registration failed', error);
+          if (error.status === 400) {
+            this.errorWarning = 'Registration failed, please try again!'; // Set the custom error message
+          } else {
+            this.errorWarning = 'An unknown error occurred. Please try again later.';
+          }
         }
       )
       console.log(this.registerForm.value);
