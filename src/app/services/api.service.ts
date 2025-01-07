@@ -52,6 +52,20 @@ export class ApiService {
           });
       }
 
+      getEvents(): Observable<any> {
+        const authToken = this.cookieService.get('authToken');
+        return this.http.get(`${this.apiUrl}/event`, {
+          headers: {
+            'Authorization': `Bearer ${authToken}`
+          }
+        }).pipe(
+          tap(response => {
+            console.log('Events response:', response); // Log the response
+          }),
+          catchError(this.handleError)
+        );
+      }
+
       private handleError(error: HttpErrorResponse): Observable<never> {
         let errorMessage = 'An unknown error occurred!';
     

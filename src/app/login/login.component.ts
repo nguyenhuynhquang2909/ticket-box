@@ -32,6 +32,7 @@ export class LoginComponent {
   showPassword = false;
   errorWarning: string | null = null;
 
+
   constructor(private router: Router, private fb: FormBuilder, private apiService: ApiService, private cookieService: CookieService) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -42,6 +43,7 @@ export class LoginComponent {
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
+ 
   onSubmit() {
     if (this.loginForm.valid) {
       this.apiService.loginUser(this.loginForm.value).subscribe(
