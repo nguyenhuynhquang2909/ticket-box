@@ -12,7 +12,7 @@ import { ApiService } from '../services/api.service';
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class HomepageComponent implements OnInit {
-  tickets: any[] = [];
+  events: any[] = [];
 
   constructor(private apiService: ApiService) {}
   ngOnInit(): void {
@@ -21,7 +21,7 @@ export class HomepageComponent implements OnInit {
   fetchEvents() {
     this.apiService.getEvents().subscribe(
       response => {
-        this.tickets = response.events;
+        this.events = response.events;
       },
       error => {
         console.error('Failed to fetch events', error);
