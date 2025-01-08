@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-ticket-detail',
@@ -10,21 +11,24 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './ticket-detail.component.css'
 })
 export class TicketDetailComponent implements OnInit {
-  ticket: any;
+  event: any;
   isModalOpen = false;
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private apiService: ApiService) {}
   ngOnInit(): void {
-    const ticketId = this.route.snapshot.paramMap.get('id');
-    // For demonstration, we'll use a static ticket object
-    this.ticket = {
-      id: ticketId,
-      title: 'Concert A',
-      description: 'Description for Concert A',
-      price: 50,
-      date: '2023-01-01',
-      remaining: 100,
-      image: 'https://via.placeholder.com/600x400'
-    };
+    const eventId = this.route.snapshot.paramMap.get('id');
+    this.fetchEventDetails(eventId);
+  }
+  fetchEventDetails(eventId: string | null): void {
+    if (eventId) {
+      this.apiService.getEventDetails(eventId).subscribe(
+        response => {
+          this.event = response.event;
+        },
+        error => {
+          console.error('Failed to fetch event details', error);
+        }
+      )
+    }
   }
   openModal() {
     this.isModalOpen = true;
@@ -35,8 +39,17 @@ export class TicketDetailComponent implements OnInit {
   }
 
   confirmPurchase(){
-    alert('Ticket purchased successfully');
-    this.closeModal();
+    if (this.event && this.event.id) {
+      this.apiService.buyTicket(this.event.id).subscribe(
+        response => {
+          console.log('Ticket purchased:', response);
+          this.closeModal();
+        },
+        error => {
+          console.error('Failed to purchase ticket', error);
+        }
+      )
+    }
   }
 
 }

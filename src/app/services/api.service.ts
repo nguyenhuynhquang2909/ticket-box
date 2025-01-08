@@ -66,6 +66,46 @@ export class ApiService {
         );
       }
 
+      getEventDetails(eventId: string): Observable<any> {
+        const authToken = this.cookieService.get('authToken');
+        return this.http.get<{ event: any }>(`${this.apiUrl}/event/${eventId}`, {
+          headers: {
+            'Authorization': `Bearer ${authToken}`
+          }
+        })
+            .pipe(
+                catchError(this.handleError)
+            );
+      }
+
+      buyTicket(eventId: string): Observable<any> {
+        const authToken = this.cookieService.get('authToken');
+        return this.http.post(`${this.apiUrl}/ticket/create`, {event_id: eventId}, {
+          headers: {
+            'Authorization': `Bearer ${authToken}`
+          }
+        })
+            .pipe(
+                catchError(this.handleError)
+            );
+      }
+
+
+      getTickets(): Observable<any> {
+        const authToken = this.cookieService.get('authToken');
+        return this.http.get(`${this.apiUrl}/ticket`, {
+          headers: {
+            'Authorization': `Bearer ${authToken}`
+          }
+        }).pipe(
+          tap(response => {
+            console.log('Events response:', response); // Log the response
+          }),
+          catchError(this.handleError)
+        );
+      }
+      
+
       private handleError(error: HttpErrorResponse): Observable<never> {
         let errorMessage = 'An unknown error occurred!';
     
