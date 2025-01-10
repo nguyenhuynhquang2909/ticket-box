@@ -104,6 +104,18 @@ export class ApiService {
           catchError(this.handleError)
         );
       }
+
+      getTicketDetails(ticketId: string): Observable<any> {
+        const authToken = this.cookieService.get('authToken');
+        return this.http.get<{ ticket: any }>(`${this.apiUrl}/ticket/${ticketId}`, {
+          headers: {
+            'Authorization': `Bearer ${authToken}`
+          }
+        })
+            .pipe(
+                catchError(this.handleError)
+            );
+      }
       
 
       private handleError(error: HttpErrorResponse): Observable<never> {

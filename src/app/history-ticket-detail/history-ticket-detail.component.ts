@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ApiService } from '../services/api.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-history-ticket-detail',
@@ -8,21 +10,29 @@ import { Component, OnDestroy } from '@angular/core';
   templateUrl: './history-ticket-detail.component.html',
   styleUrl: './history-ticket-detail.component.css'
 })
-export class HistoryTicketDetailComponent implements OnDestroy {
-  
-  ticket = {
-    title: 'Concert A',
-    description: 'Description for Concert A',
-    price: 50,
-    date: '2023-01-01',
-    qrCode: 'https://via.placeholder.com/150', // Placeholder for QR code image URL,
-    image: 'https://via.placeholder.com/600x400' // Placeholder for ticket image URL
-  };
-
+export class HistoryTicketDetailComponent implements OnDestroy, OnInit {
+  constructor(private apiService: ApiService, private route: ActivatedRoute) {}
+  ngOnInit(): void {
+    const ticketId = this.route.snapshot.paramMap.get('ticket_id');
+    this.fetchTicketDetails(ticketId);
+  }
   isQrModalOpen = false;
   showQrButton = true;
   countdown = 30;
   countdownInterval: any;
+  ticket: any;
+  fetchTicketDetails(ticketId: string | null): void {
+    if (ticketId) {
+      this.apiService.getTicketDetails(ticketId).subscribe(
+        response => {
+          this.ticket = response.ticket;
+        },
+        error => {
+          console.error('Failed to fetch ticket details', error);
+        }
+      )
+    }
+  }
 
   openQrModal() {
     this.isQrModalOpen = true;
