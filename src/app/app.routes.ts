@@ -15,6 +15,6 @@ export const routes: Routes = [
     { path: 'homepage', component: HomepageComponent, canActivate: [AuthGuard] },
     { path: 'ticket/:id', component: TicketDetailComponent, canActivate: [AuthGuard] },
     { path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard] },
-    { path: 'history-ticket/:id', component: HistoryTicketDetailComponent, canActivate: [AuthGuard] },
+    { path: 'history-ticket/:ticket_id', component: HistoryTicketDetailComponent, canActivate: [AuthGuard] },
     { path: '', redirectTo: '/login', pathMatch: 'full' }
   ];

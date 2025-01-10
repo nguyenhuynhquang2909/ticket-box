@@ -30,7 +30,7 @@ export class HistoryTicketDetailComponent implements OnDestroy, OnInit {
         error => {
           console.error('Failed to fetch ticket details', error);
         }
-      )
+      );
     }
   }
 
