@@ -116,6 +116,19 @@ export class ApiService {
                 catchError(this.handleError)
             );
       }
+
+      generateQrCode(eventId: string): Observable<any> {
+        const authToken = this.cookieService.get('authToken');
+        const body = {event_id: eventId}
+        return this.http.post(`${this.apiUrl}/ticket/generate-qr-code`, body, {
+          headers: {
+            'Authorization': `Bearer ${authToken}`
+          }
+        }) 
+        .pipe(
+          catchError(this.handleError)
+        )
+      }
       
 
       private handleError(error: HttpErrorResponse): Observable<never> {

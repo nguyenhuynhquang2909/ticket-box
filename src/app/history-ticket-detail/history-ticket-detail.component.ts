@@ -21,11 +21,15 @@ export class HistoryTicketDetailComponent implements OnDestroy, OnInit {
   countdown = 30;
   countdownInterval: any;
   ticket: any;
+  qrCodeUrl: string | null = null;
+  eventId: string | null = null;
+
   fetchTicketDetails(ticketId: string | null): void {
     if (ticketId) {
       this.apiService.getTicketDetails(ticketId).subscribe(
         response => {
           this.ticket = response.ticket;
+          this.eventId = this.ticket.event_id;
         },
         error => {
           console.error('Failed to fetch ticket details', error);
@@ -34,9 +38,25 @@ export class HistoryTicketDetailComponent implements OnDestroy, OnInit {
     }
   }
 
+  generateQrCode(eventId: string) {
+    if (eventId) {
+      this.apiService.generateQrCode(eventId).subscribe(
+        response => {
+          this.qrCodeUrl = response.presigned_url;
+        },
+        error => {
+          console.log('Failed to generate QR Code', error);
+        }
+      )
+    }
+  }
+
   openQrModal() {
     this.isQrModalOpen = true;
     this.startCountdown();
+    if (this.eventId) {
+      this.generateQrCode(this.eventId);
+    }
   }
 
   
