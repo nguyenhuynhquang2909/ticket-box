@@ -13,6 +13,8 @@ import { ApiService } from '../services/api.service';
 export class TicketDetailComponent implements OnInit {
   event: any;
   isModalOpen = false;
+  successMessage: string | null = null;
+
   constructor(private route: ActivatedRoute, private apiService: ApiService) {}
   ngOnInit(): void {
     const eventId = this.route.snapshot.paramMap.get('id');
@@ -38,17 +40,18 @@ export class TicketDetailComponent implements OnInit {
     this.isModalOpen = false;
   }
 
-  confirmPurchase(){
+  confirmPurchase() {
     if (this.event && this.event.id) {
       this.apiService.buyTicket(this.event.id).subscribe(
         response => {
           console.log('Ticket purchased:', response);
+          this.successMessage = 'Ticket purchased successfully!';
           this.closeModal();
         },
         error => {
           console.error('Failed to purchase ticket', error);
         }
-      )
+      );
     }
   }
 

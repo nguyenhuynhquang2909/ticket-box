@@ -43,6 +43,7 @@ export class HistoryTicketDetailComponent implements OnDestroy, OnInit {
       this.apiService.generateQrCode(eventId).subscribe(
         response => {
           this.qrCodeUrl = response.presigned_url;
+          console.log(this.qrCodeUrl);
         },
         error => {
           console.log('Failed to generate QR Code', error);

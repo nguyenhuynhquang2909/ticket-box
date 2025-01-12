@@ -3,12 +3,15 @@ import { environment } from "../../environments/enviroment";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { catchError, Observable, tap, throwError } from "rxjs";
 import { CookieService } from "ngx-cookie-service";
+import {jwtDecode} from "jwt-decode"
 
 @Injectable({
     providedIn: 'root',
 })
 export class ApiService {
     private apiUrl = environment.apiUrl;
+    public email: string | null = null;
+
     constructor(private http: HttpClient, private cookieService: CookieService) {}
 
     registerUser(data: { email: string, username: string, password: string }): Observable<any> {
@@ -35,6 +38,8 @@ export class ApiService {
               const token = response.body?.token;
               if (token) {
                 this.cookieService.set('authToken', token); 
+                const decodedToken: any = jwtDecode(token);
+                this.email = decodedToken.email;
               }
             }),
             catchError(this.handleError)
